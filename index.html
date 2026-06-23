@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ООО Аспирант — бухгалтерское сопровождение, налоги и отчётность для ИП и ООО в Москве и Туле.">
+  <title>ООО Аспирант — бухгалтерия для бизнеса</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-primary: #1c4da1;
+      --color-primary-light: #e8eef8;
+      --color-text: #1a1a2e;
+      --color-text-muted: #6b7280;
+      --color-bg: #ffffff;
+      --color-bg-secondary: #f8f9fc;
+      --color-border: #e5e7eb;
+      --color-danger: #dc2626;
+      --container: 1160px;
+      --radius: 18px;
+      --header-height: 76px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: calc(var(--header-height) + 18px);
+    }
+
+    body {
+      margin: 0;
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--color-text);
+      background: var(--color-bg);
+      line-height: 1.6;
+    }
+
+    body.menu-open { overflow: hidden; }
+
+    a { color: inherit; text-decoration: none; }
+    img, svg { max-width: 100%; display: block; }
+    button, input, textarea { font: inherit; }
+
+    .container {
+      width: min(100% - 32px, var(--container));
+      margin-inline: auto;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      min-height: var(--header-height);
+      background: rgba(255, 255, 255, 0.96);
+      border-bottom: 1px solid var(--color-border);
+      backdrop-filter: blur(10px);
+    }
+
+    .navbar {
+      min-height: var(--header-height);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .logo-mark {
+      width: 20px;
+      height: 20px;
+      background: var(--color-primary);
+      border-radius: 5px;
+      flex: 0 0 auto;
+    }
+
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .nav-link {
+      display: inline-flex;
+      padding: 10px 12px;
+      color: var(--color-text-muted);
+      font-weight: 600;
+      transition: color 0.2s ease, background 0.2s ease;
+      border-radius: 999px;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: var(--color-primary);
+      background: var(--color-primary-light);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 46px;
+      padding: 12px 20px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary { color: #fff; background: var(--color-primary); }
+    .btn-primary:hover { background: #163f85; }
+    .btn-ghost { color: var(--color-primary); background: #fff; border-color: #c8d5ec; }
+
+    .hamburger {
+      display: none;
+      width: 44px;
+      height: 44px;
+      border: 1px solid var(--color-border);
+      border-radius: 12px;
+      background: #fff;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .hamburger span {
+      position: absolute;
+      left: 11px;
+      right: 11px;
+      height: 2px;
+      background: var(--color-text);
+      border-radius: 2px;
+      transition: transform 0.2s ease, opacity 0.2s ease, top 0.2s ease;
+    }
+
+    .hamburger span:nth-child(1) { top: 14px; }
+    .hamburger span:nth-child(2) { top: 21px; }
+    .hamburger span:nth-child(3) { top: 28px; }
+    .hamburger.active span:nth-child(1) { top: 21px; transform: rotate(45deg); }
+    .hamburger.active span:nth-child(2) { opacity: 0; }
+    .hamburger.active span:nth-child(3) { top: 21px; transform: rotate(-45deg); }
+
+    main { overflow: hidden; }
+
+    section { padding: 88px 0; }
+    .section-muted { background: var(--color-bg-secondary); }
+
+    .section-header {
+      max-width: 720px;
+      margin: 0 auto 44px;
+      text-align: center;
+    }
+
+    .section-title {
+      margin: 0 0 12px;
+      font-size: clamp(32px, 5vw, 44px);
+      line-height: 1.12;
+      letter-spacing: -0.04em;
+    }
+
+    .section-subtitle,
+    .muted { color: var(--color-text-muted); }
+
+    .hero {
+      padding: 72px 0 48px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+      gap: 52px;
+      align-items: center;
+    }
+
+    .tag-pill {
+      display: inline-flex;
+      align-items: center;
+      margin-bottom: 20px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      color: var(--color-primary);
+      background: var(--color-primary-light);
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    h1 {
+      margin: 0 0 22px;
+      max-width: 720px;
+      font-size: clamp(40px, 6.8vw, 68px);
+      line-height: 1.02;
+      letter-spacing: -0.06em;
+    }
+
+    .hero-text {
+      margin: 0 0 30px;
+      max-width: 620px;
+      color: var(--color-text-muted);
+      font-size: 19px;
+    }
+
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; }
+
+    .illustration-card {
+      padding: 24px;
+      border: 1px solid var(--color-border);
+      border-radius: 30px;
+      background: #fff;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 48px;
+    }
+
+    .stat {
+      padding: 22px;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      text-align: center;
+      background: #fff;
+    }
+
+    .stat strong {
+      display: block;
+      color: var(--color-primary);
+      font-size: 30px;
+      line-height: 1.1;
+    }
+
+    .about-grid,
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+
+    .lead {
+      margin: 0;
+      font-size: 18px;
+      color: var(--color-text-muted);
+    }
+
+    .feature-list { display: grid; gap: 16px; }
+
+    .feature-card,
+    .service-card,
+    .pricing-card,
+    .contact-card,
+    .form-card {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    .feature-card,
+    .contact-card { padding: 22px; }
+
+    .card-hover { transition: transform 0.2s ease, border-color 0.2s ease; }
+    .card-hover:hover { transform: translateY(-4px); border-color: #c8d5ec; }
+
+    .icon-box {
+      width: 46px;
+      height: 46px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+      color: var(--color-primary);
+      background: var(--color-primary-light);
+      border-radius: 14px;
+    }
+
+    .feature-card h3,
+    .service-card h3,
+    .pricing-card h3 { margin: 0 0 8px; font-size: 20px; }
+    .feature-card p,
+    .service-card p { margin: 0; color: var(--color-text-muted); }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .service-card { padding: 24px; }
+
+    .details-link {
+      margin-top: 18px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: var(--color-primary);
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .service-details {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.25s ease;
+    }
+
+    .service-details > div { overflow: hidden; }
+    .service-card.open .service-details { grid-template-rows: 1fr; }
+    .service-details p { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--color-border); }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .pricing-card { position: relative; padding: 28px; }
+    .pricing-card.popular { border: 2px solid var(--color-primary); }
+
+    .badge {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      color: #fff;
+      background: var(--color-primary);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .price {
+      margin: 18px 0;
+      color: var(--color-primary);
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .check-list { margin: 0 0 24px; padding: 0; list-style: none; display: grid; gap: 10px; color: var(--color-text-muted); }
+    .check-list li { display: flex; gap: 10px; }
+    .check-list li::before { content: "✓"; color: var(--color-primary); font-weight: 800; }
+
+    .contact-items { display: grid; gap: 16px; }
+    .contact-row { display: flex; gap: 14px; align-items: flex-start; }
+    .contact-row p { margin: 0; color: var(--color-text-muted); }
+
+    .form-card { padding: 28px; }
+    .field { margin-bottom: 16px; }
+    label { display: block; margin-bottom: 8px; font-weight: 700; }
+    input, textarea {
+      width: 100%;
+      border: 1px solid var(--color-border);
+      border-radius: 14px;
+      padding: 13px 14px;
+      background: #fff;
+      color: var(--color-text);
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    textarea { min-height: 126px; resize: vertical; }
+    input:focus, textarea:focus { border-color: var(--color-primary); box-shadow: 0 0 0 4px var(--color-primary-light); }
+    .invalid { border-color: var(--color-danger) !important; }
+    .success-message { display: none; margin-top: 14px; color: #166534; font-weight: 700; }
+    .success-message.show { display: block; }
+
+    .site-footer { padding: 38px 0; border-top: 1px solid var(--color-border); background: #fff; }
+    .footer-grid { display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: center; }
+    .footer-links { display: flex; flex-wrap: wrap; gap: 18px; color: var(--color-text-muted); font-weight: 600; }
+    .copyright { margin: 12px 0 0; color: var(--color-text-muted); font-size: 14px; }
+
+    .fade-in { opacity: 0; transform: translateY(22px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 900px) {
+      .hamburger { display: inline-flex; }
+      .nav-menu {
+        position: fixed;
+        top: var(--header-height);
+        left: 0;
+        right: 0;
+        display: none;
+        padding: 20px 16px 28px;
+        background: #fff;
+        border-bottom: 1px solid var(--color-border);
+      }
+      .nav-menu.open { display: block; }
+      .nav-links { display: grid; gap: 8px; margin-bottom: 18px; }
+      .nav-link { width: 100%; }
+      .nav-menu .btn { width: 100%; }
+      .hero-grid, .about-grid, .contact-grid { grid-template-columns: 1fr; }
+      .hero { padding-top: 48px; }
+      .services-grid, .pricing-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      .container { width: min(100% - 24px, var(--container)); }
+      section { padding: 64px 0; }
+      .hero-actions .btn { width: 100%; }
+      .stats, .services-grid, .pricing-grid { grid-template-columns: 1fr; }
+      .illustration-card { padding: 14px; border-radius: 22px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container navbar">
+      <a class="logo" href="#hero" aria-label="ООО Аспирант">
+        <span class="logo-mark" aria-hidden="true"></span>
+        <span>Аспирант</span>
+      </a>
+      <nav class="nav-menu" id="navMenu" aria-label="Основная навигация">
+        <ul class="nav-links">
+          <li><a class="nav-link" href="#about">О нас</a></li>
+          <li><a class="nav-link" href="#services">Услуги</a></li>
+          <li><a class="nav-link" href="#pricing">Цены</a></li>
+          <li><a class="nav-link" href="#contacts">Контакты</a></li>
+        </ul>
+        <a class="btn btn-primary" href="#contacts">Получить консультацию</a>
+      </nav>
+      <button class="hamburger" id="hamburger" type="button" aria-label="Открыть меню" aria-controls="navMenu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero fade-in" id="hero">
+      <div class="container">
+        <div class="hero-grid">
+          <div>
+            <span class="tag-pill">Бухгалтерия для бизнеса</span>
+            <h1>Профессиональный учёт — без ошибок и штрафов</h1>
+            <p class="hero-text">Берём на себя бухгалтерию, налоги и отчётность для ИП и ООО. Работаем в Москве и Туле.</p>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="#contacts">Оставить заявку</a>
+              <a class="btn btn-ghost" href="#services">Узнать об услугах</a>
+            </div>
+          </div>
+          <div class="illustration-card" aria-label="Иллюстрация бухгалтерских документов, калькулятора и монет">
+            <svg viewBox="0 0 560 420" role="img" aria-labelledby="heroSvgTitle">
+              <title id="heroSvgTitle">Документы, калькулятор и монеты</title>
+              <rect x="40" y="42" width="235" height="300" rx="22" fill="#e8eef8"/>
+              <rect x="72" y="20" width="235" height="300" rx="22" fill="#ffffff" stroke="#1c4da1" stroke-width="4"/>
+              <path d="M247 20v68h60" fill="none" stroke="#1c4da1" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+              <rect x="105" y="105" width="140" height="12" rx="6" fill="#1c4da1" opacity="0.9"/>
+              <rect x="105" y="140" width="164" height="10" rx="5" fill="#c8d5ec"/>
+              <rect x="105" y="168" width="132" height="10" rx="5" fill="#c8d5ec"/>
+              <rect x="105" y="210" width="84" height="84" rx="14" fill="#e8eef8"/>
+              <path d="M123 250l17 17 35-42" fill="none" stroke="#1c4da1" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+              <rect x="305" y="150" width="170" height="214" rx="24" fill="#1c4da1"/>
+              <rect x="330" y="178" width="120" height="42" rx="10" fill="#ffffff" opacity="0.95"/>
+              <g fill="#e8eef8">
+                <rect x="330" y="246" width="30" height="30" rx="8"/><rect x="375" y="246" width="30" height="30" rx="8"/><rect x="420" y="246" width="30" height="30" rx="8"/>
+                <rect x="330" y="292" width="30" height="30" rx="8"/><rect x="375" y="292" width="30" height="30" rx="8"/><rect x="420" y="292" width="30" height="30" rx="8"/>
+              </g>
+              <g stroke="#1c4da1" stroke-width="4">
+                <ellipse cx="430" cy="85" rx="58" ry="18" fill="#e8eef8"/>
+                <path d="M372 85v58c0 10 26 18 58 18s58-8 58-18V85" fill="#e8eef8"/>
+                <path d="M372 114c0 10 26 18 58 18s58-8 58-18" fill="none"/>
+              </g>
+            </svg>
+          </div>
+        </div>
+        <div class="stats" aria-label="Ключевые показатели">
+          <div class="stat"><strong>100+</strong><span>клиентов</span></div>
+          <div class="stat"><strong>5+</strong><span>лет опыта</span></div>
+          <div class="stat"><strong>0</strong><span>штрафов</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-muted fade-in" id="about">
+      <div class="container">
+        <div class="section-header"><h2 class="section-title">О компании</h2></div>
+        <div class="about-grid">
+          <p class="lead">ООО «Аспирант» помогает предпринимателям спокойно вести бизнес: берёт на себя бухгалтерский и налоговый учёт, готовит отчётность, следит за сроками и объясняет сложные вопросы простым языком. Мы работаем с ИП и ООО, учитываем специфику вашей отрасли и предлагаем понятный формат сопровождения без лишней бюрократии.</p>
+          <div class="feature-list">
+            <article class="feature-card card-hover"><span class="icon-box" aria-hidden="true">🎓</span><h3>Профильное образование</h3><p>Наши специалисты имеют бухгалтерское и налоговое образование и регулярно следят за изменениями законодательства.</p></article>
+            <article class="feature-card card-hover"><span class="icon-box" aria-hidden="true">🤝</span><h3>Долгосрочное сотрудничество</h3><p>Выстраиваем устойчивые отношения с клиентами и становимся надёжной финансовой опорой для бизнеса.</p></article>
+            <article class="feature-card card-hover"><span class="icon-box" aria-hidden="true">₽</span><h3>Прозрачное ценообразование</h3><p>Подбираем стоимость индивидуально под обороты, систему налогообложения и объём задач вашей компании.</p></article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="fade-in" id="services">
+      <div class="container">
+        <div class="section-header"><h2 class="section-title">Наши услуги</h2></div>
+        <div class="services-grid">
+          <article class="service-card card-hover"><span class="icon-box" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2z"/></svg></span><h3>Регистрация ИП / ООО</h3><p>Помогаем подготовить документы и зарегистрировать бизнес через банк без похода в ИФНС.</p><button class="details-link" type="button">Подробнее</button><div class="service-details"><div><p>Подскажем подходящую систему налогообложения, проверим данные и сопроводим процесс до получения регистрационных документов.</p></div></div></article>
+          <article class="service-card card-hover"><span class="icon-box" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h6"/></svg></span><h3>Нулевая отчётность</h3><p>Готовим и сдаём нулевые декларации для компаний и предпринимателей без деятельности.</p><button class="details-link" type="button">Подробнее</button><div class="service-details"><div><p>Контролируем сроки подачи, формируем комплект отчётности и помогаем избежать штрафов за просрочку.</p></div></div></article>
+          <article class="service-card card-hover"><span class="icon-box" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/></svg></span><h3>Комплексное бухгалтерское обслуживание</h3><p>Полностью ведём учёт для ИП и ООО: операции, налоги, отчётность и коммуникации с ведомствами.</p><button class="details-link" type="button">Подробнее</button><div class="service-details"><div><p>Берём на себя регулярные задачи бухгалтерии, готовим платежи и отчёты, консультируем руководителя по текущим вопросам.</p></div></div></article>
+          <article class="service-card card-hover"><span class="icon-box" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 7h6M9 11h6M9 15h4"/><path d="M5 3h14v18H5z"/></svg></span><h3>Первичная документация</h3><p>Обрабатываем, систематизируем и храним первичные документы для корректного учёта.</p><button class="details-link" type="button">Подробнее</button><div class="service-details"><div><p>Проверяем закрывающие документы, акты, накладные и счета, помогаем восстановить недостающие бумаги.</p></div></div></article>
+          <article class="service-card card-hover"><span class="icon-box" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg></span><h3>Расчёт зарплаты и НДФЛ</h3><p>Рассчитываем зарплату, страховые взносы, НДФЛ, отпускные и больничные.</p><button class="details-link" type="button">Подробнее</button><div class="service-details"><div><p>Ведём кадровые начисления, готовим ведомости и отчётность по сотрудникам с учётом актуальных требований.</p></div></div></article>
+          <article class="service-card card-hover"><span class="icon-box" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18M17 8H9.5a3.5 3.5 0 0 0 0 7H14a3 3 0 0 1 0 6H6"/></svg></span><h3>Декларация 3-НДФЛ</h3><p>Подготавливаем и подаём декларацию 3-НДФЛ для вычетов и декларирования доходов.</p><button class="details-link" type="button">Подробнее</button><div class="service-details"><div><p>Поможем собрать подтверждающие документы, заполнить декларацию и отправить её в налоговую инспекцию.</p></div></div></article>
+          <article class="service-card card-hover"><span class="icon-box" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></span><h3>Воинский учёт</h3><p>Организуем и ведём воинский учёт сотрудников в соответствии с требованиями законодательства.</p><button class="details-link" type="button">Подробнее</button><div class="service-details"><div><p>Подготовим документы, журналы и уведомления, поможем наладить процесс взаимодействия с военкоматом.</p></div></div></article>
+          <article class="service-card card-hover"><span class="icon-box" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a4 4 0 0 1-4 4H7l-4 4V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/></svg></span><h3>Консультации</h3><p>Даём устные и письменные консультации по налогам, бухгалтерскому учёту и документообороту.</p><button class="details-link" type="button">Подробнее</button><div class="service-details"><div><p>Разберём вашу ситуацию, предложим безопасные варианты действий и подготовим понятные рекомендации.</p></div></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-muted fade-in" id="pricing">
+      <div class="container">
+        <div class="section-header"><h2 class="section-title">Стоимость услуг</h2><p class="section-subtitle">Цены рассчитываются индивидуально под задачи вашей компании</p></div>
+        <div class="pricing-grid">
+          <article class="pricing-card card-hover"><h3>Базовый</h3><p class="muted">ИП на УСН, нулевая отчётность</p><div class="price">от 3 000 ₽</div><ul class="check-list"><li>Подготовка нулевой отчётности</li><li>Контроль сроков сдачи</li><li>Краткая консультация</li></ul><a class="btn btn-primary" href="#contacts">Рассчитать стоимость</a></article>
+          <article class="pricing-card popular card-hover"><span class="badge">Популярный</span><h3>Стандарт</h3><p class="muted">ИП/ООО с небольшим оборотом</p><div class="price">от 12 000 ₽</div><ul class="check-list"><li>Ведение бухгалтерского учёта</li><li>Расчёт налогов и платежей</li><li>Сдача регулярной отчётности</li><li>Поддержка по текущим вопросам</li></ul><a class="btn btn-primary" href="#contacts">Рассчитать стоимость</a></article>
+          <article class="pricing-card card-hover"><h3>Индивидуальный</h3><p class="muted">ООО с полным бухгалтерским сопровождением</p><div class="price">по запросу</div><ul class="check-list"><li>Комплексное сопровождение</li><li>Зарплата и кадровые начисления</li><li>Первичная документация</li><li>Персональные консультации</li></ul><a class="btn btn-primary" href="#contacts">Рассчитать стоимость</a></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="fade-in" id="contacts">
+      <div class="container">
+        <div class="section-header"><h2 class="section-title">Контакты</h2></div>
+        <div class="contact-grid">
+          <div class="contact-items">
+            <article class="contact-card contact-row card-hover"><span class="icon-box" aria-hidden="true">☎</span><div><h3>Телефон</h3><!-- TODO: заменить placeholder телефона на актуальный номер --><p>+7 (000) 000-00-00</p></div></article>
+            <article class="contact-card contact-row card-hover"><span class="icon-box" aria-hidden="true">@</span><div><h3>Email</h3><!-- TODO: заменить placeholder email на актуальный адрес --><p>info@example.ru</p></div></article>
+            <article class="contact-card contact-row card-hover"><span class="icon-box" aria-hidden="true">⌖</span><div><h3>Адрес</h3><p>г. Москва / г. Тула</p></div></article>
+          </div>
+          <form class="form-card" id="contactForm" novalidate>
+            <div class="field"><label for="name">Имя</label><input id="name" name="name" type="text" required></div>
+            <div class="field"><label for="phone">Телефон</label><input id="phone" name="phone" type="tel" required></div>
+            <div class="field"><label for="message">Сообщение</label><textarea id="message" name="message" required></textarea></div>
+            <button class="btn btn-primary" type="submit">Отправить заявку</button>
+            <p class="success-message" id="successMessage">Спасибо! Мы свяжемся с вами в ближайшее время.</p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <a class="logo" href="#hero"><span class="logo-mark" aria-hidden="true"></span><span>Аспирант</span></a>
+        <p class="copyright">Профессиональная бухгалтерия для вашего бизнеса</p>
+        <p class="copyright">© 2025 ООО Аспирант. Все права защищены.</p>
+      </div>
+      <nav class="footer-links" aria-label="Навигация в подвале">
+        <a href="#about">О нас</a><a href="#services">Услуги</a><a href="#pricing">Цены</a><a href="#contacts">Контакты</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+    const hamburger = document.getElementById('hamburger');
+    const navMenu = document.getElementById('navMenu');
+    const navLinks = document.querySelectorAll('.nav-link, .nav-menu .btn, .footer-links a');
+
+    function closeMenu() {
+      hamburger.classList.remove('active');
+      navMenu.classList.remove('open');
+      document.body.classList.remove('menu-open');
+      hamburger.setAttribute('aria-expanded', 'false');
+      hamburger.setAttribute('aria-label', 'Открыть меню');
+    }
+
+    hamburger.addEventListener('click', () => {
+      const isOpen = navMenu.classList.toggle('open');
+      hamburger.classList.toggle('active', isOpen);
+      document.body.classList.toggle('menu-open', isOpen);
+      hamburger.setAttribute('aria-expanded', String(isOpen));
+      hamburger.setAttribute('aria-label', isOpen ? 'Закрыть меню' : 'Открыть меню');
+    });
+
+    navLinks.forEach((link) => link.addEventListener('click', closeMenu));
+
+    document.querySelectorAll('.details-link').forEach((button) => {
+      button.addEventListener('click', () => {
+        const card = button.closest('.service-card');
+        const isOpen = card.classList.toggle('open');
+        button.textContent = isOpen ? 'Свернуть' : 'Подробнее';
+      });
+    });
+
+    const form = document.getElementById('contactForm');
+    const successMessage = document.getElementById('successMessage');
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const requiredFields = form.querySelectorAll('[required]');
+      let isValid = true;
+
+      requiredFields.forEach((field) => {
+        const empty = !field.value.trim();
+        field.classList.toggle('invalid', empty);
+        if (empty) isValid = false;
+      });
+
+      if (!isValid) {
+        successMessage.classList.remove('show');
+        return;
+      }
+
+      form.reset();
+      successMessage.classList.add('show');
+    });
+
+    form.querySelectorAll('[required]').forEach((field) => {
+      field.addEventListener('input', () => field.classList.remove('invalid'));
+    });
+
+    const sections = document.querySelectorAll('main section[id]');
+    const menuLinks = document.querySelectorAll('.nav-link');
+
+    const navObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        menuLinks.forEach((link) => {
+          link.classList.toggle('active', link.getAttribute('href') === `#${entry.target.id}`);
+        });
+      });
+    }, { rootMargin: '-35% 0px -55% 0px', threshold: 0.01 });
+
+    sections.forEach((section) => navObserver.observe(section));
+
+    const fadeObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          fadeObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.fade-in').forEach((element) => fadeObserver.observe(element));
+  </script>
+</body>
+</html>
