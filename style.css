@@ -60,7 +60,7 @@
       display: inline-flex;
       align-items: center;
       gap: 10px;
-      font-size: 22px;
+      font-size: 20px;
       font-weight: 800;
       letter-spacing: -0.03em;
     }
@@ -240,7 +240,6 @@
       line-height: 1.1;
     }
 
-    .about-grid,
     .contact-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -249,12 +248,21 @@
     }
 
     .lead {
-      margin: 0;
+      margin-bottom: 25px;
       font-size: 18px;
       color: var(--color-text-muted);
     }
 
-    .feature-list { display: grid; gap: 16px; }
+    /* .about-grid{
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+    } */
+
+    .feature-list { 
+      display: grid; 
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px; 
+    }
 
     .feature-card,
     .service-card,
@@ -288,18 +296,35 @@
     .service-card h3,
     .pricing-card h3 { margin: 0 0 8px; font-size: 20px; }
     .feature-card p,
-    .service-card p { margin: 0; color: var(--color-text-muted); }
+    .service-card p { margin: 0; color: var(--color-text-muted); flex: 1;}
 
     .services-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(6, 1fr);
       gap: 18px;
     }
 
-    .service-card { padding: 24px; }
+    .service-card { padding: 24px; grid-column: span 2; }
+
+    .service-card:nth-child(1),
+    .service-card:nth-child(2) {
+      grid-column: span 3; /* 6/3=2 */
+    }
+
+    .service-card-info{
+      min-height: 102px;
+      margin-bottom: 18px;
+    }
+
+    .service-items {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
 
     .details-link {
-      margin-top: 18px;
+      align-self: flex-start;
+      /* margin-top: auto; */
       padding: 0;
       border: 0;
       background: transparent;
@@ -347,11 +372,13 @@
       letter-spacing: -0.03em;
     }
 
-    .check-list { margin: 0 0 24px; padding: 0; list-style: none; display: grid; gap: 10px; color: var(--color-text-muted); }
+    .list-size { min-height: 133px; margin-bottom: 36px;}
+
+    .check-list { padding: 0; list-style: none; display: grid; gap: 10px; color: var(--color-text-muted); }
     .check-list li { display: flex; gap: 10px; }
     .check-list li::before { content: "✓"; color: var(--color-primary); font-weight: 800; }
 
-    .contact-items { display: grid; gap: 16px; }
+    .contact-items { display: grid; gap: 23px; min-height: 500px;}
     .contact-row { display: flex; gap: 14px; align-items: flex-start; }
     .contact-row p { margin: 0; color: var(--color-text-muted); }
 
