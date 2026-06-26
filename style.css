@@ -1,8 +1,9 @@
 :root {
-      --color-primary: #1c4da1;
-      --color-primary-light: #e8eef8;
-      --color-text: #1a1a2e;
+      --color-primary: #30e3ca;
+      --color-primary-light: #e4f9f5;
+      --color-text: #40514e;
       --color-text-muted: #6b7280;
+      --color-site-header: #11999E;
       --color-bg: #ffffff;
       --color-bg-secondary: #f8f9fc;
       --color-border: #e5e7eb;
