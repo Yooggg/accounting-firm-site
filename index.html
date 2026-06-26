@@ -288,13 +288,23 @@
         <div class="contact-grid">
           <div class="contact-items">
             <article class="contact-card contact-row card-hover"><span class="icon-box" aria-hidden="true">☎</span><div><h3>Телефон</h3><!-- TODO: заменить placeholder телефона на актуальный номер --><p>+7 (000) 000-00-00</p></div></article>
-            <article class="contact-card contact-row card-hover"><span class="icon-box" aria-hidden="true">@</span><div><h3>Email</h3><!-- TODO: заменить placeholder email на актуальный адрес --><p>info@example.ru</p></div></article>
+            <article class="contact-card contact-row card-hover"><span class="icon-box" aria-hidden="true">@</span><div><h3>Email</h3><!-- TODO: заменить placeholder email на актуальный адрес --><p>info@aspirant.msk.ru</p></div></article>
             <article class="contact-card contact-row card-hover"><span class="icon-box" aria-hidden="true">⌖</span><div><h3>Адрес</h3><p>г. Москва / г. Тула</p></div></article>
           </div>
-          <form class="form-card" id="contactForm" novalidate>
-            <div class="field"><label for="name">Имя</label><input id="name" name="name" type="text" required></div>
-            <div class="field"><label for="phone">Телефон</label><input id="phone" name="phone" type="tel" required></div>
-            <div class="field"><label for="message">Сообщение</label><textarea id="message" name="message" required></textarea></div>
+          <form action="https://api.web3forms.com/submit" method="POST" class="form-card" id="contactForm" novalidate>
+            <input type="hidden" name="access_key" value="7b03467a-8448-4d0a-b924-28e98105e9c9">
+            <div class="field">
+              <label for="name">Имя</label>
+              <input id="name" name="name" type="text" required>
+            </div>
+            <div class="field">
+              <label for="phone">Телефон</label>
+              <input id="phone" name="phone" type="tel" required>
+            </div>
+            <div class="field">
+              <label for="message">Сообщение</label>
+              <textarea id="message" name="message" required></textarea>
+            </div>
             <button class="btn btn-primary" type="submit">Отправить заявку</button>
             <p class="success-message" id="successMessage">Спасибо! Мы свяжемся с вами в ближайшее время.</p>
           </form>
