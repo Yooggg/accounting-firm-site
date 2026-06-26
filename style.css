@@ -1,5 +1,5 @@
 :root {
-      --color-primary: #30e3ca;
+      --color-primary: #cca8e9;
       --color-primary-light: #e4f9f5;
       --color-text: #40514e;
       --color-text-muted: #6b7280;
@@ -8,6 +8,7 @@
       --color-bg-secondary: #f8f9fc;
       --color-border: #e5e7eb;
       --color-danger: #dc2626;
+      --color-hover: #c3bef0;
       --container: 1160px;
       --radius: 18px;
       --header-height: 76px;
@@ -120,7 +121,7 @@
 
     .btn:hover { transform: translateY(-2px); }
     .btn-primary { color: #fff; background: var(--color-primary); }
-    .btn-primary:hover { background: #163f85; }
+    .btn-primary:hover { background: var(--color-hover); }
     .btn-ghost { color: var(--color-primary); background: #fff; border-color: #c8d5ec; }
 
     .hamburger {
