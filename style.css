@@ -284,6 +284,7 @@ h1 {
 	text-align: justify;
 	overflow-wrap: break-word;
 	word-break: normal;
+	/* letter-spacing: -0.05em; */
 }
 
 .main-text {
@@ -292,7 +293,8 @@ h1 {
 	color: var(--color-text);
 	letter-spacing: -0.06em;
 	line-height: 1.3;
-	font-size: clamp(36px, 6.8vw, 64px);
+	font-size: clamp(36px, 6.8vw, 53px);
+	text-align: center;
 	hyphens: auto;
 	overflow-wrap: break-word;
 }
@@ -568,6 +570,7 @@ h1 {
 }
 
 .form-card {
+	height: 100%;
 	padding: 28px;
 }
 .field {
