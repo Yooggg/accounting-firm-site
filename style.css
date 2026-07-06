@@ -93,7 +93,7 @@ textarea {
 
 .logo-text {
 	white-space: nowrap;
-	font-size: clamp(12px, 6vw, 20px);
+	font-size: clamp(1px, 4vw, 20px);
 }
 
 .logo-mark {
@@ -558,6 +558,7 @@ h1 {
 	display: grid;
 	gap: 23px;
 	min-height: 500px;
+	height: 100%;
 }
 .contact-row {
 	display: flex;
@@ -607,13 +608,132 @@ textarea:focus {
 	border-color: var(--color-danger) !important;
 }
 .success-message {
-	display: none;
 	margin-top: 14px;
 	color: #166534;
 	font-weight: 700;
+	opacity: 0;
+	max-height: 0;
+	overflow: hidden;
+	transform: translateY(-6px);
+	transition:
+		opacity 0.4s ease,
+		transform 0.4s ease,
+		max-height 0.4s ease;
 }
 .success-message.show {
-	display: block;
+	opacity: 1;
+	max-height: 60px;
+	transform: translateY(0);
+}
+.error-message {
+	margin-top: 14px;
+	color: var(--color-danger);
+	font-weight: 700;
+	opacity: 0;
+	max-height: 0;
+	overflow: hidden;
+	transform: translateY(-6px);
+	transition:
+		opacity 0.4s ease,
+		transform 0.4s ease,
+		max-height 0.4s ease;
+}
+.error-message.show {
+	opacity: 1;
+	max-height: 60px;
+	transform: translateY(0);
+}
+
+.toast {
+	display: flex;
+	align-items: flex-start;
+	gap: 12px;
+	padding: 16px 18px;
+	border-radius: 14px;
+	background: #fff;
+	box-shadow:
+		0 12px 32px rgba(20, 30, 60, 0.16),
+		0 2px 8px rgba(20, 30, 60, 0.08);
+	border-left: 4px solid var(--color-primary);
+	opacity: 0;
+	transform: translateX(24px);
+	transition:
+		opacity 0.35s ease,
+		transform 0.35s ease;
+}
+
+.toast.toast-visible {
+	opacity: 1;
+	transform: translateX(0);
+}
+.toast.toast-leaving {
+	opacity: 0;
+	transform: translateX(24px);
+}
+
+.toast.toast-success {
+	border-left-color: #16a34a;
+}
+.toast.toast-error {
+	border-left-color: var(--color-danger);
+}
+
+.toast-icon {
+	flex: 0 0 auto;
+	width: 24px;
+	height: 24px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	color: #fff;
+	font-size: 14px;
+	font-weight: 800;
+}
+.toast-success .toast-icon {
+	background: #16a34a;
+}
+.toast-error .toast-icon {
+	background: var(--color-danger);
+}
+
+.toast-body {
+	flex: 1;
+}
+.toast-title {
+	margin: 0 0 2px;
+	font-weight: 700;
+	font-size: 15px;
+}
+.toast-text {
+	margin: 0;
+	color: var(--color-text-muted);
+	font-size: 14px;
+	line-height: 1.45;
+}
+
+.toast-close {
+	flex: 0 0 auto;
+	border: 0;
+	background: transparent;
+	color: var(--color-text-muted);
+	cursor: pointer;
+	font-size: 18px;
+	line-height: 1;
+	padding: 2px;
+}
+.toast-close:hover {
+	color: var(--color-text);
+}
+
+@media (max-width: 480px) {
+	.toast-container {
+		top: auto;
+		bottom: 20px;
+		right: 16px;
+		left: 16px;
+		max-width: none;
+	}
 }
 
 .site-footer {
@@ -628,16 +748,88 @@ textarea:focus {
 	align-items: center;
 }
 .footer-links {
-	display: flex;
+	text-align: justify;
+	grid-column: span 1;
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
 	flex-wrap: wrap;
 	gap: 18px;
 	color: var(--color-text-muted);
 	font-weight: 600;
 }
+.footer-links a:nth-child(6),
+.footer-links a:nth-child(5) {
+	grid-column: span 2;
+	/* text-align: justify; */
+	gap: 18;
+}
 .copyright {
 	margin: 12px 0 0;
 	color: var(--color-text-muted);
 	font-size: 14px;
+}
+
+input:focus,
+textarea:focus {
+	border-color: var(--color-primary);
+	box-shadow: 0 0 0 4px var(--color-primary-light);
+}
+.invalid {
+	border-color: var(--color-danger);
+}
+.field-error-text {
+	margin: 6px 0 0;
+	color: var(--color-danger);
+	font-size: 13px;
+	font-weight: 600;
+}
+.consent-field .field-error-text {
+	margin-left: 28px;
+}
+.toast-container {
+	position: fixed;
+	top: 20px;
+	right: 20px;
+	z-index: 1000;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	max-width: min(340px, calc(100vw - 40px));
+}
+
+.consent-field {
+	margin-bottom: 20px;
+}
+.consent-label {
+	display: flex;
+	align-items: flex-start;
+	gap: 10px;
+	margin-bottom: 0;
+	font-weight: 400;
+	font-size: 14px;
+	color: var(--color-text-muted);
+	cursor: pointer;
+}
+.consent-label input[type='checkbox'] {
+	width: 18px;
+	height: 18px;
+	margin-top: 2px;
+	flex: 0 0 auto;
+	accent-color: var(--color-primary);
+	cursor: pointer;
+}
+.consent-label a {
+	color: var(--color-primary);
+	font-weight: 600;
+	text-decoration: underline;
+}
+.consent-label.invalid {
+	color: var(--color-danger);
+}
+.consent-label.invalid input[type='checkbox'] {
+	outline: 2px solid var(--color-danger);
+	outline-offset: 2px;
+	border-radius: 4px;
 }
 
 .fade-in {

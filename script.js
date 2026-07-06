@@ -29,31 +29,185 @@ document.querySelectorAll('.details-link').forEach((button) => {
 });
 
 const form = document.getElementById('contactForm');
-const successMessage = document.getElementById('successMessage');
+const consentCheckbox = document.getElementById('consent');
+const consentLabel = document.querySelector('.consent-label');
+const submitButton = form.querySelector('button[type="submit"]');
+const toastContainer = document.getElementById('toastContainer');
 
-form.addEventListener('submit', (event) => {
+function showToast({ type = 'success', title, text, duration = 5000 }) {
+	const toast = document.createElement('div');
+	toast.className = `toast toast-${type}`;
+	toast.setAttribute('role', 'status');
+
+	const icon = document.createElement('span');
+	icon.className = 'toast-icon';
+	icon.textContent = type === 'success' ? '✓' : '!';
+	icon.setAttribute('aria-hidden', 'true');
+
+	const body = document.createElement('div');
+	body.className = 'toast-body';
+	body.innerHTML = `<p class="toast-title"></p><p class="toast-text"></p>`;
+	body.querySelector('.toast-title').textContent = title;
+	body.querySelector('.toast-text').textContent = text;
+
+	const closeBtn = document.createElement('button');
+	closeBtn.className = 'toast-close';
+	closeBtn.type = 'button';
+	closeBtn.setAttribute('aria-label', 'Закрыть уведомление');
+	closeBtn.textContent = '×';
+
+	toast.append(icon, body, closeBtn);
+	toastContainer.appendChild(toast);
+
+	requestAnimationFrame(() => toast.classList.add('toast-visible'));
+
+	let dismissTimer;
+	function dismiss() {
+		clearTimeout(dismissTimer);
+		toast.classList.remove('toast-visible');
+		toast.classList.add('toast-leaving');
+		toast.addEventListener('transitionend', () => toast.remove(), { once: true });
+	}
+
+	closeBtn.addEventListener('click', dismiss);
+	dismissTimer = setTimeout(dismiss, duration);
+}
+
+function setFieldError(fieldName, message) {
+	const input = document.getElementById(fieldName);
+	if (!input) return;
+
+	if (fieldName === 'consent') {
+		consentLabel.classList.add('invalid');
+	} else {
+		input.classList.add('invalid');
+	}
+
+	const container = input.closest('.field');
+	if (!container) return;
+	let errorEl = container.querySelector('.field-error-text');
+	if (!errorEl) {
+		errorEl = document.createElement('p');
+		errorEl.className = 'field-error-text';
+		container.appendChild(errorEl);
+	}
+	errorEl.textContent = message;
+}
+
+function clearFieldErrors() {
+	form.querySelectorAll('.field-error-text').forEach((el) => el.remove());
+	form.querySelectorAll('input.invalid, textarea.invalid').forEach((el) =>
+		el.classList.remove('invalid')
+	);
+	if (consentLabel) consentLabel.classList.remove('invalid');
+}
+
+form.addEventListener('submit', async (event) => {
 	event.preventDefault();
-	const requiredFields = form.querySelectorAll('[required]');
+	clearFieldErrors();
+
+	const requiredFields = form.querySelectorAll(
+		'input[required]:not([type="checkbox"]), textarea[required]'
+	);
 	let isValid = true;
 
 	requiredFields.forEach((field) => {
-		const empty = !field.value.trim();
-		field.classList.toggle('invalid', empty);
-		if (empty) isValid = false;
+		if (!field.value.trim()) {
+			setFieldError(field.id, 'Заполните это поле');
+			isValid = false;
+		}
 	});
 
-	if (!isValid) {
-		successMessage.classList.remove('show');
-		return;
+	if (consentCheckbox && !consentCheckbox.checked) {
+		setFieldError('consent', 'Нужно поставить галочку согласия');
+		isValid = false;
 	}
 
-	form.reset();
-	successMessage.classList.add('show');
+	if (!isValid) return;
+
+	const payload = {
+		name: form.name.value.trim(),
+		phone: form.phone.value.trim(),
+		message: form.message.value.trim(),
+		consent: consentCheckbox.checked,
+	};
+
+	submitButton.disabled = true;
+	const originalLabel = submitButton.textContent;
+	submitButton.textContent = 'Отправка...';
+
+	try {
+		const response = await fetch('/api/contact', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(payload),
+		});
+
+		if (!response.ok) {
+			let body = null;
+			try {
+				body = await response.json();
+			} catch (parseErr) {
+				body = null;
+			}
+
+			const detail = body && body.detail ? body.detail : null;
+			const fieldErrors = (detail && detail.errors) || {};
+			const hasFieldErrors = Object.keys(fieldErrors).length > 0;
+
+			Object.entries(fieldErrors).forEach(([field, message]) =>
+				setFieldError(field, message)
+			);
+
+			showToast({
+				type: 'error',
+				title: hasFieldErrors ? 'Проверьте форму' : 'Не удалось отправить',
+				text:
+					(detail && detail.message) || 'Попробуйте ещё раз или позвоните нам напрямую.',
+			});
+			return;
+		}
+
+		form.reset();
+		clearFieldErrors();
+		showToast({
+			type: 'success',
+			title: 'Заявка отправлена',
+			text: 'Спасибо! Мы свяжемся с вами в ближайшее время.',
+		});
+	} catch (err) {
+		showToast({
+			type: 'error',
+			title: 'Не удалось отправить',
+			text: 'Проверьте подключение к интернету и попробуйте ещё раз.',
+		});
+	} finally {
+		submitButton.disabled = false;
+		submitButton.textContent = originalLabel;
+	}
 });
 
-form.querySelectorAll('[required]').forEach((field) => {
-	field.addEventListener('input', () => field.classList.remove('invalid'));
-});
+form.querySelectorAll('input[required]:not([type="checkbox"]), textarea[required]').forEach(
+	(field) => {
+		field.addEventListener('input', () => {
+			field.classList.remove('invalid');
+			const container = field.closest('.field');
+			const errorEl = container && container.querySelector('.field-error-text');
+			if (errorEl) errorEl.remove();
+		});
+	}
+);
+
+if (consentCheckbox) {
+	consentCheckbox.addEventListener('change', () => {
+		if (consentCheckbox.checked) {
+			consentLabel.classList.remove('invalid');
+			const container = consentCheckbox.closest('.field');
+			const errorEl = container && container.querySelector('.field-error-text');
+			if (errorEl) errorEl.remove();
+		}
+	});
+}
 
 const sections = document.querySelectorAll('main section[id]');
 const menuLinks = document.querySelectorAll('.nav-link');
