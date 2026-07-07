@@ -132,9 +132,9 @@ form.addEventListener('submit', async (event) => {
 		consent: consentCheckbox.checked,
 	};
 
-	submitButton.disabled = true;
-	const originalLabel = submitButton.textContent;
-	submitButton.textContent = 'Отправка...';
+	// submitButton.disabled = true;
+	// const originalLabel = submitButton.textContent;
+	// submitButton.textContent = 'Отправка...';
 
 	try {
 		const response = await fetch('/api/contact', {
@@ -182,8 +182,8 @@ form.addEventListener('submit', async (event) => {
 			text: 'Проверьте подключение к интернету и попробуйте ещё раз.',
 		});
 	} finally {
-		submitButton.disabled = false;
-		submitButton.textContent = originalLabel;
+		// submitButton.disabled = false;
+		// submitButton.textContent = originalLabel;
 	}
 });
 

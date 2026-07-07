@@ -660,6 +660,7 @@ textarea:focus {
 	transition:
 		opacity 0.35s ease,
 		transform 0.35s ease;
+	pointer-events: auto;
 }
 
 .toast.toast-visible {
@@ -795,6 +796,7 @@ textarea:focus {
 	flex-direction: column;
 	gap: 12px;
 	max-width: min(340px, calc(100vw - 40px));
+	pointer-events: none;
 }
 
 .consent-field {
