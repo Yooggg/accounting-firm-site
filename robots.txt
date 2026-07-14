@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /documents/
+
+Sitemap: https://aspirant.msk.ru/sitemap.xml
