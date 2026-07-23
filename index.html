@@ -21,14 +21,6 @@
 		<link rel="icon" type="image/png" sizes="192x192" href="/images/icons/icon-192.png" />
 		<link rel="icon" type="image/png" sizes="512x512" href="/images/icons/icon-512.png" />
 		<link rel="stylesheet" href="style.css" />
-		<noscript
-			><div>
-				<img
-					src="https://mc.yandex.ru/watch/110604711"
-					style="position: absolute; left: -9999px"
-					alt=""
-				/></div
-		></noscript>
 		<script type="application/ld+json">
 			{
 				"@context": "https://schema.org",
@@ -886,12 +878,13 @@
 					<a class="logo" href="#hero"
 						><span class="logo-mark" aria-hidden="true"></span><span>Аспирант</span></a
 					>
-					<p class="copyright">Профессиональная бухгалтерия для вашего бизнеса</p>
-					<p class="copyright">© 2025 ООО Аспирант. Все права защищены.</p>
+					<p class="copyright">
+						ООО «Аспирант» · ИНН: 5043062762 · ОГРН: 1175074014610<br />
+						Юридический адрес: 142200, Московская обл, Серпухов г, Лавриненко ул, дом №
+						10
+					</p>
 				</div>
 				<nav class="footer-links" aria-label="Навигация в подвале">
-					<a href="#about">О нас</a><a href="#services">Услуги</a
-					><a href="#pricing">Цены</a><a href="#contacts">Контакты</a>
 					<a href="documents/agreement.pdf" target="_blank" rel="noopener"
 						>Пользовательское соглашение</a
 					>
@@ -902,6 +895,29 @@
 			</div>
 		</footer>
 		<div class="toast-container" id="toastContainer" aria-live="polite"></div>
+		<div
+			class="cookie-banner"
+			id="cookieBanner"
+			role="dialog"
+			aria-label="Уведомление об использовании cookie"
+		>
+			<div class="cookie-banner-inner">
+				<p>
+					Мы используем файлы cookie для аналитики и улучшения сайта. Подробнее — в
+					<a href="documents/privacy-policy.pdf" target="_blank" rel="noopener"
+						>политике конфиденциальности</a
+					>.
+				</p>
+				<div class="cookie-banner-actions">
+					<button class="btn btn-ghost" id="cookieDecline" type="button">
+						Только необходимые
+					</button>
+					<button class="btn btn-primary" id="cookieAccept" type="button">
+						Принять всё
+					</button>
+				</div>
+			</div>
+		</div>
 		<script src="script.js"></script>
 	</body>
 </html>

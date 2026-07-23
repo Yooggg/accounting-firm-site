@@ -243,11 +243,53 @@ const fadeObserver = new IntersectionObserver(
 
 document.querySelectorAll('.fade-in').forEach((element) => fadeObserver.observe(element));
 
-(function(m,e,t,r,i,k,a){
-        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-        m[i].l=1*new Date();
-        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
-    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=110604711', 'ym');
+const CONSENT_KEY = 'aspirant_cookie_consent'; // 'accepted' | 'declined'
+const cookieBanner = document.getElementById('cookieBanner');
 
-    ym(110604711, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+function loadYandexMetrika() {
+	(function (m, e, t, r, i, k, a) {
+		m[i] =
+			m[i] ||
+			function () {
+				(m[i].a = m[i].a || []).push(arguments);
+			};
+		m[i].l = 1 * new Date();
+		for (var j = 0; j < document.scripts.length; j++) {
+			if (document.scripts[j].src === r) {
+				return;
+			}
+		}
+		((k = e.createElement(t)),
+			(a = e.getElementsByTagName(t)[0]),
+			(k.async = 1),
+			(k.src = r),
+			a.parentNode.insertBefore(k, a));
+	})(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js?id=110604711', 'ym');
+
+	ym(110604711, 'init', {
+		ssr: true,
+		webvisor: true,
+		clickmap: true,
+		ecommerce: 'dataLayer',
+		referrer: document.referrer,
+		url: location.href,
+		accurateTrackBounce: true,
+		trackLinks: true,
+	});
+}
+
+function applyConsent(value) {
+	localStorage.setItem(CONSENT_KEY, value);
+	if (cookieBanner) cookieBanner.classList.remove('visible');
+	if (value === 'accepted') loadYandexMetrika();
+}
+
+const storedConsent = localStorage.getItem(CONSENT_KEY);
+if (!storedConsent && cookieBanner) {
+	cookieBanner.classList.add('visible');
+} else if (storedConsent === 'accepted') {
+	loadYandexMetrika();
+}
+
+document.getElementById('cookieAccept')?.addEventListener('click', () => applyConsent('accepted'));
+document.getElementById('cookieDecline')?.addEventListener('click', () => applyConsent('declined'));
