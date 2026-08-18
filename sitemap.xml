@@ -2,8 +2,56 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 	<url>
 		<loc>https://aspirant.msk.ru/</loc>
-		<lastmod>2026-07-14</lastmod>
+		<lastmod>2026-08-09</lastmod>
 		<changefreq>monthly</changefreq>
 		<priority>1.0</priority>
+	</url>
+	<url>
+		<loc>https://aspirant.msk.ru/uslugi/registraciya-ip-ooo/</loc>
+		<lastmod>2026-08-09</lastmod>
+		<changefreq>monthly</changefreq>
+		<priority>0.8</priority>
+	</url>
+	<url>
+		<loc>https://aspirant.msk.ru/uslugi/buhgalterskoe-obsluzhivanie/</loc>
+		<lastmod>2026-08-09</lastmod>
+		<changefreq>monthly</changefreq>
+		<priority>0.8</priority>
+	</url>
+	<url>
+		<loc>https://aspirant.msk.ru/uslugi/nulevaya-otchetnost/</loc>
+		<lastmod>2026-08-09</lastmod>
+		<changefreq>monthly</changefreq>
+		<priority>0.8</priority>
+	</url>
+	<url>
+		<loc>https://aspirant.msk.ru/uslugi/pervichnaya-dokumentaciya/</loc>
+		<lastmod>2026-08-09</lastmod>
+		<changefreq>monthly</changefreq>
+		<priority>0.8</priority>
+	</url>
+	<url>
+		<loc>https://aspirant.msk.ru/uslugi/raschet-zarplaty-ndfl/</loc>
+		<lastmod>2026-08-09</lastmod>
+		<changefreq>monthly</changefreq>
+		<priority>0.8</priority>
+	</url>
+	<url>
+		<loc>https://aspirant.msk.ru/uslugi/deklaraciya-3-ndfl/</loc>
+		<lastmod>2026-08-09</lastmod>
+		<changefreq>monthly</changefreq>
+		<priority>0.8</priority>
+	</url>
+	<url>
+		<loc>https://aspirant.msk.ru/uslugi/voinskiy-uchet/</loc>
+		<lastmod>2026-08-09</lastmod>
+		<changefreq>monthly</changefreq>
+		<priority>0.8</priority>
+	</url>
+	<url>
+		<loc>https://aspirant.msk.ru/uslugi/konsultacii/</loc>
+		<lastmod>2026-08-09</lastmod>
+		<changefreq>monthly</changefreq>
+		<priority>0.8</priority>
 	</url>
 </urlset>

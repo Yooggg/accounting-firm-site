@@ -31,7 +31,6 @@ document.querySelectorAll('.details-link').forEach((button) => {
 const form = document.getElementById('contactForm');
 const consentCheckbox = document.getElementById('consent');
 const consentLabel = document.querySelector('.consent-label');
-const submitButton = form.querySelector('button[type="submit"]');
 const toastContainer = document.getElementById('toastContainer');
 
 function showToast({ type = 'success', title, text, duration = 5000 }) {
@@ -73,140 +72,147 @@ function showToast({ type = 'success', title, text, duration = 5000 }) {
 	dismissTimer = setTimeout(dismiss, duration);
 }
 
-function setFieldError(fieldName, message) {
-	const input = document.getElementById(fieldName);
-	if (!input) return;
+// Логика формы обратной связи актуальна только на страницах, где есть #contactForm
+// (главная страница). На страницах услуг формы нет — без этой проверки скрипт падал
+// на обращении к несуществующему form и не доходил до кода ниже (fadeObserver,
+// cookie-banner), из-за чего страницы услуг оставались пустыми (opacity: 0 у .fade-in).
+if (form) {
+	const setFieldError = (fieldName, message) => {
+		const input = document.getElementById(fieldName);
+		if (!input) return;
 
-	if (fieldName === 'consent') {
-		consentLabel.classList.add('invalid');
-	} else {
-		input.classList.add('invalid');
-	}
-
-	const container = input.closest('.field');
-	if (!container) return;
-	let errorEl = container.querySelector('.field-error-text');
-	if (!errorEl) {
-		errorEl = document.createElement('p');
-		errorEl.className = 'field-error-text';
-		container.appendChild(errorEl);
-	}
-	errorEl.textContent = message;
-}
-
-function clearFieldErrors() {
-	form.querySelectorAll('.field-error-text').forEach((el) => el.remove());
-	form.querySelectorAll('input.invalid, textarea.invalid').forEach((el) =>
-		el.classList.remove('invalid')
-	);
-	if (consentLabel) consentLabel.classList.remove('invalid');
-}
-
-form.addEventListener('submit', async (event) => {
-	event.preventDefault();
-	clearFieldErrors();
-
-	const requiredFields = form.querySelectorAll(
-		'input[required]:not([type="checkbox"]), textarea[required]'
-	);
-	let isValid = true;
-
-	requiredFields.forEach((field) => {
-		if (!field.value.trim()) {
-			setFieldError(field.id, 'Заполните это поле');
-			isValid = false;
+		if (fieldName === 'consent') {
+			consentLabel.classList.add('invalid');
+		} else {
+			input.classList.add('invalid');
 		}
-	});
 
-	if (consentCheckbox && !consentCheckbox.checked) {
-		setFieldError('consent', 'Нужно поставить галочку согласия');
-		isValid = false;
-	}
-
-	if (!isValid) return;
-
-	const payload = {
-		name: form.name.value.trim(),
-		phone: form.phone.value.trim(),
-		message: form.message.value.trim(),
-		consent: consentCheckbox.checked,
+		const container = input.closest('.field');
+		if (!container) return;
+		let errorEl = container.querySelector('.field-error-text');
+		if (!errorEl) {
+			errorEl = document.createElement('p');
+			errorEl.className = 'field-error-text';
+			container.appendChild(errorEl);
+		}
+		errorEl.textContent = message;
 	};
 
-	// submitButton.disabled = true;
-	// const originalLabel = submitButton.textContent;
-	// submitButton.textContent = 'Отправка...';
+	const clearFieldErrors = () => {
+		form.querySelectorAll('.field-error-text').forEach((el) => el.remove());
+		form.querySelectorAll('input.invalid, textarea.invalid').forEach((el) =>
+			el.classList.remove('invalid')
+		);
+		if (consentLabel) consentLabel.classList.remove('invalid');
+	};
 
-	try {
-		const response = await fetch('/api/contact', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(payload),
+	form.addEventListener('submit', async (event) => {
+		event.preventDefault();
+		clearFieldErrors();
+
+		const requiredFields = form.querySelectorAll(
+			'input[required]:not([type="checkbox"]), textarea[required]'
+		);
+		let isValid = true;
+
+		requiredFields.forEach((field) => {
+			if (!field.value.trim()) {
+				setFieldError(field.id, 'Заполните это поле');
+				isValid = false;
+			}
 		});
 
-		if (!response.ok) {
-			let body = null;
-			try {
-				body = await response.json();
-			} catch (parseErr) {
-				body = null;
+		if (consentCheckbox && !consentCheckbox.checked) {
+			setFieldError('consent', 'Нужно поставить галочку согласия');
+			isValid = false;
+		}
+
+		if (!isValid) return;
+
+		const payload = {
+			name: form.name.value.trim(),
+			phone: form.phone.value.trim(),
+			message: form.message.value.trim(),
+			consent: consentCheckbox.checked,
+		};
+
+		// submitButton.disabled = true;
+		// const originalLabel = submitButton.textContent;
+		// submitButton.textContent = 'Отправка...';
+
+		try {
+			const response = await fetch('/api/contact', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify(payload),
+			});
+
+			if (!response.ok) {
+				let body = null;
+				try {
+					body = await response.json();
+				} catch (parseErr) {
+					body = null;
+				}
+
+				const detail = body && body.detail ? body.detail : null;
+				const fieldErrors = (detail && detail.errors) || {};
+				const hasFieldErrors = Object.keys(fieldErrors).length > 0;
+
+				Object.entries(fieldErrors).forEach(([field, message]) =>
+					setFieldError(field, message)
+				);
+
+				showToast({
+					type: 'error',
+					title: hasFieldErrors ? 'Проверьте форму' : 'Не удалось отправить',
+					text:
+						(detail && detail.message) ||
+						'Попробуйте ещё раз или позвоните нам напрямую.',
+				});
+				return;
 			}
 
-			const detail = body && body.detail ? body.detail : null;
-			const fieldErrors = (detail && detail.errors) || {};
-			const hasFieldErrors = Object.keys(fieldErrors).length > 0;
-
-			Object.entries(fieldErrors).forEach(([field, message]) =>
-				setFieldError(field, message)
-			);
-
+			form.reset();
+			clearFieldErrors();
+			showToast({
+				type: 'success',
+				title: 'Заявка отправлена',
+				text: 'Спасибо! Мы свяжемся с вами в ближайшее время.',
+			});
+		} catch (err) {
 			showToast({
 				type: 'error',
-				title: hasFieldErrors ? 'Проверьте форму' : 'Не удалось отправить',
-				text:
-					(detail && detail.message) || 'Попробуйте ещё раз или позвоните нам напрямую.',
+				title: 'Не удалось отправить',
+				text: 'Проверьте подключение к интернету и попробуйте ещё раз.',
 			});
-			return;
-		}
-
-		form.reset();
-		clearFieldErrors();
-		showToast({
-			type: 'success',
-			title: 'Заявка отправлена',
-			text: 'Спасибо! Мы свяжемся с вами в ближайшее время.',
-		});
-	} catch (err) {
-		showToast({
-			type: 'error',
-			title: 'Не удалось отправить',
-			text: 'Проверьте подключение к интернету и попробуйте ещё раз.',
-		});
-	} finally {
-		// submitButton.disabled = false;
-		// submitButton.textContent = originalLabel;
-	}
-});
-
-form.querySelectorAll('input[required]:not([type="checkbox"]), textarea[required]').forEach(
-	(field) => {
-		field.addEventListener('input', () => {
-			field.classList.remove('invalid');
-			const container = field.closest('.field');
-			const errorEl = container && container.querySelector('.field-error-text');
-			if (errorEl) errorEl.remove();
-		});
-	}
-);
-
-if (consentCheckbox) {
-	consentCheckbox.addEventListener('change', () => {
-		if (consentCheckbox.checked) {
-			consentLabel.classList.remove('invalid');
-			const container = consentCheckbox.closest('.field');
-			const errorEl = container && container.querySelector('.field-error-text');
-			if (errorEl) errorEl.remove();
+		} finally {
+			// submitButton.disabled = false;
+			// submitButton.textContent = originalLabel;
 		}
 	});
+
+	form.querySelectorAll('input[required]:not([type="checkbox"]), textarea[required]').forEach(
+		(field) => {
+			field.addEventListener('input', () => {
+				field.classList.remove('invalid');
+				const container = field.closest('.field');
+				const errorEl = container && container.querySelector('.field-error-text');
+				if (errorEl) errorEl.remove();
+			});
+		}
+	);
+
+	if (consentCheckbox) {
+		consentCheckbox.addEventListener('change', () => {
+			if (consentCheckbox.checked) {
+				consentLabel.classList.remove('invalid');
+				const container = consentCheckbox.closest('.field');
+				const errorEl = container && container.querySelector('.field-error-text');
+				if (errorEl) errorEl.remove();
+			}
+		});
+	}
 }
 
 const sections = document.querySelectorAll('main section[id]');
