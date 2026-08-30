@@ -834,6 +834,13 @@ textarea:focus {
 	gap: 18px;
 	color: var(--color-text-muted);
 	font-weight: 600;
+	justify-items: center;
+}
+
+.pdf:nth-child(3) {
+	grid-column: span 2;
+	display: flex;
+	justify-content: center;
 }
 
 .copyright {
